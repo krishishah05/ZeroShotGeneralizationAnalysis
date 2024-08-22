@@ -40,8 +40,8 @@ def plot_similarity_matrix(similarity_matrix, classes_a, classes_b, dataset_pair
     plt.show()
 
 # Directories
-folder_a = 'Pretraining&TrainingDatasets'  # Update with the correct path
-folder_b = 'EvaluationDatasets'            # Update with the correct path
+folder_a = ZeroShotGeneralizationAnalysis/Pretraining&TrainingDatasets
+folder_b = ZeroShotGeneralizationAnalysis/EvaluationDatasets
 
 # Iterate through datasets in both folders
 for dataset_a in os.listdir(folder_a):
