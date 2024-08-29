@@ -46,13 +46,19 @@ folder_b = 'ZeroShotGeneralizationAnalysis/EvaluationDatasets'
 # Iterate through datasets in both folders
 for dataset_a in os.listdir(folder_a):
     dataset_a_path = os.path.join(folder_a, dataset_a)
-    if os.path.isdir(dataset_a_path):
-        classes_a = [f for f in os.listdir(dataset_a_path) if os.path.isfile(os.path.join(dataset_a_path, f))]
+    if dataset_a_path == 'PretrainingAndTrainingDatasets/.DS_Store':
+        continue
+    if os.path.isfile(dataset_a_path):
+        with open(dataset_a_path, 'r') as f:
+            classes_a = f.read().splitlines()
         
         for dataset_b in os.listdir(folder_b):
             dataset_b_path = os.path.join(folder_b, dataset_b)
-            if os.path.isdir(dataset_b_path):
-                classes_b = [f for f in os.listdir(dataset_b_path) if os.path.isfile(os.path.join(dataset_b_path, f))]
+            if dataset_b_path == 'EvaluationDatasets/.DS_Store':
+                continue
+            if os.path.isfile(dataset_b_path):
+                with open(dataset_b_path, 'r') as f:
+                    classes_b = f.read().splitlines()
                 
                 # Compute the similarity matrix
                 similarity_matrix = compute_similarity_matrix(classes_a, classes_b)
