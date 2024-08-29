@@ -5,8 +5,6 @@ import matplotlib.pyplot as plt
 from scipy.spatial.distance import cosine
 from sentence_transformers import SentenceTransformer
 
-
-
 model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
 
 # function to process class names
@@ -43,9 +41,13 @@ def plot_similarity_matrix(similarity_matrix, classes_a, classes_b, dataset_pair
     plt.ylabel('Classes from Pretraining&TrainingDatasets (Folder A)')
     plt.show()
 
-# Directories???
-folder_a = 'A'
-folder_b = 'B'
+# Directories
+
+folder_a = 'EvaluationDatasets'
+folder_b = 'Pretraining&TrainingDatasets'
+
+classes_a = []
+classes_b = []
 
 # Iterate through datasets in both folders
 for dataset_a in os.listdir(folder_a):
@@ -54,23 +56,20 @@ for dataset_a in os.listdir(folder_a):
         continue
     if os.path.isfile(dataset_a_path):
         with open(dataset_a_path, 'r') as f:
-            classes_a = f.read().splitlines()
-        
-        for dataset_b in os.listdir(folder_b):
-            dataset_b_path = os.path.join(folder_b, dataset_b)
-            if dataset_b_path == 'EvaluationDatasets/.DS_Store':
-                continue
-            if os.path.isfile(dataset_b_path):
-                with open(dataset_b_path, 'r') as f:
-                    classes_b = f.read().splitlines()
-            if dataset_b_path == 'EvaluationDatasets/.DS_Store':
-                continue
-            if os.path.isfile(dataset_b_path):
-                with open(dataset_b_path, 'r') as f:
-                    classes_b = f.read().splitlines()
+            classes_a += f.read().splitlines()
+
+
+for dataset_b in os.listdir(folder_b):
+    dataset_b_path = os.path.join(folder_b, dataset_b)
+    if dataset_b_path == 'EvaluationDatasets/.DS_Store':
+        continue
+    if os.path.isfile(dataset_b_path):
+        with open(dataset_b_path, 'r') as f:
+            classes_b += (f.read().splitlines())
+
                 
-                # Compute the similarity matrix
-                similarity_matrix = compute_similarity_matrix(classes_a, classes_b)
-                
-                # Plot and inspect the similarity matrix
-                plot_similarity_matrix(similarity_matrix, classes_a, classes_b, f'{dataset_a} vs {dataset_b}')
+# Compute the similarity matrix
+similarity_matrix = compute_similarity_matrix(classes_a, classes_b)
+
+# Plot and inspect the similarity matrix
+plot_similarity_matrix(similarity_matrix, classes_a, classes_b, f'{dataset_a} vs {dataset_b}')
