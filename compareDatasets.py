@@ -6,19 +6,23 @@ from scipy.spatial.distance import cosine
 from sentence_transformers import SentenceTransformer
 
 
+
 model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
 
+# function to process class names
 # function to process class names
 def process_class_name(class_name):
     # Lowercase and convert to regex-friendly format
     return re.sub(r'\s+', '_', class_name.lower())
 
 # function to compute similarity matrix
+# function to compute similarity matrix
 def compute_similarity_matrix(classes_a, classes_b):
     # Encode the class names
     embeddings_a = model.encode([process_class_name(ca) for ca in classes_a])
     embeddings_b = model.encode([process_class_name(cb) for cb in classes_b])
     
+    # similarity matrix
     # similarity matrix
     similarity_matrix = np.zeros((len(classes_a), len(classes_b)))
     for i, emb_a in enumerate(embeddings_a):
@@ -54,6 +58,11 @@ for dataset_a in os.listdir(folder_a):
         
         for dataset_b in os.listdir(folder_b):
             dataset_b_path = os.path.join(folder_b, dataset_b)
+            if dataset_b_path == 'EvaluationDatasets/.DS_Store':
+                continue
+            if os.path.isfile(dataset_b_path):
+                with open(dataset_b_path, 'r') as f:
+                    classes_b = f.read().splitlines()
             if dataset_b_path == 'EvaluationDatasets/.DS_Store':
                 continue
             if os.path.isfile(dataset_b_path):
